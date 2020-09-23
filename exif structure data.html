@@ -1,0 +1,1297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html -->
+<HTML><HEAD><TITLE>Exif file format</TITLE>
+<META content="text/html; charset=iso-8859-1" http-equiv=Content-Type>
+<META content="MSHTML 5.00.2920.0" name=GENERATOR></HEAD>
+<BODY><A 
+href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif.html">Japanese 
+document</A> 
+<H1>Description of Exif file format</H1>Currently, most of new digicams use Exif 
+file format to store images. This specification was made by <A 
+href="http://www.jeida.or.jp/">JEIDA</A>, but there is no open document in 
+internet. So I made tiny description about Exif from some of open documents 
+which can get from internet.<BR><BR>I believe this document is basically based 
+on Exif2.1 specification, but actually I have not read official specification 
+yet, there are some 'unknown' items and it may have some of errata. If you have 
+an information about 'unknown' item or find errata, please e-mail me, <A 
+href="mailto:tsuruzoh@butaman.ne.jp">TsuruZoh Tachibanaya.</A><BR><BR><BR>This 
+is a FREE document, you may use this document for any purpose 
+(commercial/non-commercial) of all/part of this document. All trade names 
+mentioned in this document are trademarks or registered trademarks of their 
+respective holders. <BR>
+<P align=right><A href="mailto:tsuruzoh@butaman.ne.jp"><I>TsuruZoh 
+Tachibanaya</I></A><BR><BR><A 
+href="http://www.butaman.ne.jp:8000/~tsuruzoh/">http://www.butaman.ne.jp:8000/~tsuruzoh/</A><BR><BR><A 
+href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#HIST">rev. 
+1.1 Dec.19,1999</A><BR>rev. 1.0 May.28,1999 </P>
+<HR>
+
+<CENTER>
+<H2>Referenced materials</H2><A 
+href="http://www.itojun.org/diary/199610.IWOOOS/exif.html">Exif file format</A> 
+written by itojun (Japanese language document)<BR><A 
+href="http://www.yk.rim.or.jp/~mamo/Computer/DS-7/exif.html">Exif file 
+format</A> written by Mamoru Ohno (Japanese language document)<BR><A 
+href="http://partners.adobe.com/asn/developer/PDFS/TN/TIFF6.pdf">TIFF6.0 
+Specification</A> written by Adobe<BR><A 
+href="http://www.pima.net/standards/iso/standards/documents/N4378.pdf">TIFF/EP 
+Specification</A> written by ISO TC42 WG18<BR><A 
+href="http://topo.math.u-psud.fr/~bousch/exifdump.py">exifdump</A> program 
+written by Thierry Boush<BR><BR></CENTER>
+<HR>
+
+<UL>
+  <LI><A 
+  href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#AboutExif">What 
+  is Exif format?</A> 
+  <LI><A 
+  href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#JpegMarker">JPEG 
+  format and Marker</A> 
+  <LI><A 
+  href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#ExifMarker">Marker 
+  used by Exif</A> 
+  <LI><A 
+  href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#ExifData">Exif 
+  data structure</A> 
+  <UL>
+    <LI><A 
+    href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#TiffHeader">TIFF 
+    Header</A> 
+    <LI><A 
+    href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#IFD">IFD 
+    : Image file directory</A> 
+    <LI><A 
+    href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#DataForm">Data 
+    format</A> 
+    <LI><A 
+    href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#IFDRead">IFD 
+    data structure</A> 
+    <LI><A 
+    href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#ExifThumbs">Thumbnail 
+    image</A> 
+    <UL>
+      <LI><A 
+      href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#JPEGThumbs">JPEG 
+      format thumnail</A> 
+      <LI><A 
+      href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#TIFFThumbs">TIFF 
+      format thumbnail</A> </LI></UL></LI></UL>
+  <LI><A 
+  href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#ExifTags">Tag 
+  number used by Exif/TIFF</A> 
+  <UL>
+    <LI><A 
+    href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#IFD0Tags">IFD0 
+    (IFD of main image) section</A> 
+    <LI><A 
+    href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#ExifIFDTags">Exif 
+    SubIFD section</A> 
+    <LI><A 
+    href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#IFD1Tags">IFD1 
+    (IFD of thumbnail image) section</A> 
+    <LI><A 
+    href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#MiscTags">Misc 
+    Tags</A> </LI></UL>
+  <LI><A 
+  href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#APP1">Appendix 
+  1: MakerNote of Olympus digicams</A> 
+  <LI><A 
+  href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#HIST">History</A> 
+
+  <LI><A 
+  href="http://www.butaman.ne.jp/~tsuruzoh/Computer/Digicams/exif-e.html#THANKS">Acknowledgement</A> 
+  </LI></UL>
+<HR>
+<BR>
+<H2><A name=AboutExif>What is Exif file format?</A></H2>Basically, Exif file 
+format is the same as JPEG file format. Exif inserts some of image/digicam 
+information data and thumbnail image to JPEG in conformity to JPEG 
+specification. Therefore you can view Exif format image files by JPEG compliant 
+Internet browser/Picture viewer/Photo retouch software etc. as a usual JPEG 
+image files.<BR><BR>
+<H2><A name=JpegMarker>JPEG format and Marker</A></H2>Every JPEG file starts 
+from binary value '0xFFD8', ends by binary value '0xFFD9'. There are several 
+binary 0xFFXX data in JPEG data, they are called as <B>"Marker"</B>, and it 
+means the period of JPEG information data. 0xFFD8 means <B>SOI</B>(Start of 
+image), 0xFFD9 means <B>EOI</B>(End of image). These two special Markers have no 
+data following, the other Markers have data with it. Basic format of Marker is 
+below.<BR><BR><B>0xFF+Marker Number(1 byte)+Data size(2 bytes)+Data(n 
+bytes)</B><BR><BR><B>Data size</B>(2 Bytes) has "Motorola" byte align, starts 
+from bigger digits. Please notice that "Data" contains Data size descriptor, if 
+there is a Marker like this;<BR><BR><B>FF C1 00 0C</B><BR><BR>It means this 
+Marker(0xFFC1) has 0x000C(equal 12)bytes of data. But the data size '12' 
+includes "Data size" descriptor, it follows only 10 bytes of data after 
+0x000C.<BR><BR>In JPEG format, some of Markers describe data, then 
+<B>SOS</B>(Start of stream) Marker placed. After the SOS marker, JPEG image 
+stream starts and terminated by EOI Marker.<BR><BR>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD>SOI Marker</TD>
+    <TD colSpan=3>Marker XX size=SSSS</TD>
+    <TD colSpan=3>Marker YY size=TTTT</TD>
+    <TD colSpan=3>SOS Marker size=UUUU</TD>
+    <TD>Image stream</TD>
+    <TD>EOI Marker</TD></TR>
+  <TR>
+    <TD>FFD8</TD>
+    <TD>FFXX</TD>
+    <TD>SSSS</TD>
+    <TD>DDDD......</TD>
+    <TD>FFYY</TD>
+    <TD>TTTT</TD>
+    <TD>DDDD......</TD>
+    <TD>FFDA</TD>
+    <TD>UUUU</TD>
+    <TD>DDDD....</TD>
+    <TD>I I I I....</TD>
+    <TD>FFD9</TD></TR></TBODY></TABLE><BR>
+<H2><A name=ExifMarker>Marker used by Exif</A></H2>The marker 0xFFE0~0xFFEF is 
+named <B>"Application Marker"</B>, not necessary for decoding JPEG image. They 
+are used by user application. For example, older olympus/canon/casio/agfa 
+digicams use JFIF(JPEG File Interchange Format) for storing images. JFIF uses 
+APP0(0xFFE0) Marker for inserting digicam configuration data and thumbnail 
+image.<BR><BR>Also Exif uses an Application Marker for inserting data, but Exif 
+uses <B>APP1(0xFFE1)</B> Marker to avoid a conflict with JFIF format. Every Exif 
+file formats starts from this format;<BR><BR>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD>SOI Marker</TD>
+    <TD>APP1 Marker</TD>
+    <TD>APP1 Data</TD>
+    <TD>Other Marker</TD></TR>
+  <TR>
+    <TD>FFD8</TD>
+    <TD>FFE1</TD>
+    <TD>SSSS 457869660000 TTTT......</TD>
+    <TD>FFXX SSSS DDDD......</TD></TR></TBODY></TABLE><BR>It starts from SOI(0xFFD8) 
+Marker, so it's a JPEG file. Then APP1 Marker follows immediately. All the data 
+of Exif are stored in this APP1 data area. The part of "SSSS" on upper table 
+means the size of APP1 data area (Exif data area). Please notice that the size 
+"SSSS" includes the size of descriptor itself also. <BR><BR>After the "SSSS", 
+APP1 data starts. The first part is a special data to identify whether Exif or 
+not, ASCII character "Exif" and 2bytes of 0x00 are used.<BR><BR>After the APP1 
+Marker area, the other JPEG Markers follows. <BR><BR>
+<H2><A name=ExifData>Exif data structure</A></H2>Roughly structure of Exif data 
+(APP1) is shown as below. This is a case of "Intel" byte align and it contains 
+JPEG format thumbnail. As described above, Exif data is starts from ASCII 
+character "Exif" and 2bytes of 0x00, then Exif data follows. Exif uses TIFF 
+format to store data. For more datails of TIFF format, please refer to <A 
+href="http://partners.adobe.com/asn/developer/PDFS/TN/TIFF6.pdf">"TIFF6.0 
+specification"</A>.<BR><BR><BR>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD>FFE1</TD>
+    <TD colSpan=3>APP1 Marker</TD></TR>
+  <TR>
+    <TD>SSSS</TD>
+    <TD rowSpan=13>APP1 Data</TD>
+    <TD colSpan=2>APP1 Data Size</TD></TR>
+  <TR>
+    <TD>45786966 0000</TD>
+    <TD colSpan=2>Exif Header</TD></TR>
+  <TR>
+    <TD>49492A00 08000000</TD>
+    <TD colSpan=2>TIFF Header</TD></TR>
+  <TR>
+    <TD>XXXX. . . . </TD>
+    <TD rowSpan=2>IFD0 (main image)</TD>
+    <TD>Directory</TD></TR>
+  <TR>
+    <TD>LLLLLLLL</TD>
+    <TD>Link to IFD1</TD></TR>
+  <TR>
+    <TD>XXXX. . . . </TD>
+    <TD colSpan=2>Data area of IFD0</TD></TR>
+  <TR>
+    <TD>XXXX. . . . </TD>
+    <TD rowSpan=2>Exif SubIFD</TD>
+    <TD>Directory</TD></TR>
+  <TR>
+    <TD>00000000</TD>
+    <TD>End of Link</TD></TR>
+  <TR>
+    <TD>XXXX. . . . </TD>
+    <TD colSpan=2>Data area of Exif SubIFD</TD></TR>
+  <TR>
+    <TD>XXXX. . . . </TD>
+    <TD rowSpan=2>IFD1(thumbnail image)</TD>
+    <TD>Directory</TD></TR>
+  <TR>
+    <TD>00000000</TD>
+    <TD>End of Link</TD></TR>
+  <TR>
+    <TD>XXXX. . . . </TD>
+    <TD colSpan=2>Data area of IFD1</TD></TR>
+  <TR>
+    <TD>FFD8XXXX. . . XXXXFFD9</TD>
+    <TD colSpan=2>Thumbnail image</TD></TR></TBODY></TABLE>
+<H3><A name=TiffHeader>Structure of TIFF header</A></H3>First 8bytes of TIFF 
+format are TIFF header. First 2bytes defines byte align of TIFF data. If it is 
+0x4949="I I", it means "Intel" type byte align. If it is 0x4d4d="MM", it means 
+"Motorola" type byte align. For example, value '305,419,896' is noted as 
+0x12345678 by sixteenth system. At the Motrola align, it is stored as 
+0x12,0x34,0x56,0x78. If it's Intel align, it is stored as 0x78,0x56,0x34,0x12. 
+It seems that most of digicams uses Intel align. Ricoh uses Motorola align. Sony 
+uses Intel align except D700. Kodak DC200/210/240 use Motorola align, but 
+DC220/260 use Intel align though they are using PowerPC! Therefore when we need 
+the value of Exif data, we MUST check byte align every time. Though JPEG data 
+uses Motorola align only, Exif allows both alignment. I can't understand why 
+Exif didn't fix a byte align to Motorola. <BR><BR><FONT color=#c02020>Next 
+2bytes are always 2bytes-length value of 0x002A. If the data uses Intel align, 
+next 2bytes are "0x2a00". If it uses Motorola, they are "0x002a".</FONT> The 
+last 4bytes of TIFF header are an offset to the first IFD(Image File Directory, 
+described in next chapter). Includes this offset, all the offset value used in 
+TIFF format counts offset bytes from the first of TIFF header("I I" or "MM"). 
+Usually the first IFD starts immediately next to TIFF header, so this offset has 
+value '0x00000008'.<BR><BR>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD>Byte align</TD>
+    <TD>TAG Mark</TD>
+    <TD>Offset to first IFD</TD></TR>
+  <TR>
+    <TD>"I I" or "MM"</TD>
+    <TD>2A00</TD>
+    <TD>0x00000008</TD></TR></TBODY></TABLE>
+<H3><A name=IFD>IFD : Image file directory</A></H3>Next to TIFF header, there is 
+the first IFD:Image File Directory. It contains image information data. At the 
+chart below, the first 2bytes('EEEE') means the number of directory entry 
+contains in this IFD. Then directory entry (12bytes per entry) follows. After 
+last directory entry, there is a 4bytes of data('LLLLLLLL' at the chart), it 
+means an offset to next IFD. If its value is '0x00000000', it means this is the 
+last IFD and there is no linked IFD.<BR><BR>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD colSpan=4>EEEE</TD>
+    <TD>No. of directory entry</TD></TR>
+  <TR>
+    <TD>TTTT</TD>
+    <TD>ffff</TD>
+    <TD>NNNNNNNN</TD>
+    <TD>DDDDDDDD</TD>
+    <TD>Entry 0</TD></TR>
+  <TR>
+    <TD>TTTT</TD>
+    <TD>ffff</TD>
+    <TD>NNNNNNNN</TD>
+    <TD>DDDDDDDD</TD>
+    <TD>Entry 1</TD></TR>
+  <TR>
+    <TD colSpan=4>. . . . . . . . .</TD>
+    <TD>. . . . . .</TD></TR>
+  <TR>
+    <TD>TTTT</TD>
+    <TD>ffff</TD>
+    <TD>NNNNNNNN</TD>
+    <TD>DDDDDDDD</TD>
+    <TD>Entry EEEE-1</TD></TR>
+  <TR>
+    <TD colSpan=4>LLLLLLLL</TD>
+    <TD>Offset to next IFD</TD></TR></TBODY></TABLE><BR>'TTTT'(2bytes) of above 
+chart is Tag number, this shows a kind of data. 'ffff'(2bytes) is data format, 
+'NNNNNNNN'(4bytes) is number of components. 'DDDDDDDD'(4bytes) contains a data 
+value or offset to data value.<BR><BR>
+<H3><A name=DataForm>Data format</A></H3>Data format ('ffff' at the above chart) 
+is defined as below. "rational" means a fractional value, it contains 2 
+signed/unsigned long integer value, and the first represents the numerator, the 
+second, the denominator. <BR>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD>Value</TD>
+    <TD>1</TD>
+    <TD>2</TD>
+    <TD>3</TD>
+    <TD>4</TD>
+    <TD>5</TD>
+    <TD>6</TD></TR>
+  <TR>
+    <TD>Format</TD>
+    <TD>unsigned byte</TD>
+    <TD>ascii strings</TD>
+    <TD>unsigned short</TD>
+    <TD>unsigned long</TD>
+    <TD>unsigned rational</TD>
+    <TD>signed byte</TD></TR>
+  <TR>
+    <TD>Bytes/component</TD>
+    <TD>1</TD>
+    <TD>1</TD>
+    <TD>2</TD>
+    <TD>4</TD>
+    <TD>8</TD>
+    <TD>1</TD></TR>
+  <TR>
+    <TD colSpan=7></TD></TR>
+  <TR>
+    <TD>Value</TD>
+    <TD>7</TD>
+    <TD>8</TD>
+    <TD>9</TD>
+    <TD>10</TD>
+    <TD>11</TD>
+    <TD>12</TD></TR>
+  <TR>
+    <TD>Format</TD>
+    <TD>undefined</TD>
+    <TD>signed short</TD>
+    <TD>signed long</TD>
+    <TD>signed rational</TD>
+    <TD>single float</TD>
+    <TD>double float</TD></TR>
+  <TR>
+    <TD>Bytes/component</TD>
+    <TD>1</TD>
+    <TD>2</TD>
+    <TD>4</TD>
+    <TD>8</TD>
+    <TD>4</TD>
+    <TD>8</TD></TR></TBODY></TABLE><BR>You can get the total data byte length by 
+multiplies a 'bytes/components' value (see above chart) by number of components 
+stored 'NNNNNNNN' area. If total data length is less than 4bytes, 'DDDDDDDD' 
+contains the value of that Tag. If its size is over 4bytes, 'DDDDDDDD' contains 
+the offset to data stored address. <BR>
+<H3><A name=IFDRead>IFD data structure</A></H3>At Exif format, the first IFD is 
+IFD0(IFD of main image), then it links to IFD1(IFD of thumbnail image) and IFD 
+link is terminated. But IFD0/IFD1 doesn't contain any digicam's information such 
+as shutter speed, focal length etc. IFD0 always contains special Tag <B>Exif 
+Offset(0x8769)</B>, it shows an offset to <B>Exif SubIFD</B>. Exif SubIFD is IFD 
+formatted data also, it contains digicam's information.<BR><BR><PRE>0000: 49 49 2A 00 08 00 00 00-02 00 1A 01 05 00 01 00
+0010: 00 00 26 00 00 00 69 87-04 00 01 00 00 00 11 02
+0020: 00 00 40 00 00 00 48 00-00 00 01 00 00 00
+</PRE>If the first part of TIFF data is above, it can read as; 
+<UL>
+  <LI>The first 2bytes are "I I", byte align is 'Intel'.<BR>
+  <LI>Address 0x0004~0x0007 is 0x08000000, IFD0 starts from address '0x0008'<BR>
+  <LI>Address 0x0008~0x0009 is 0x0200, number of directory entry of IFD0 is 
+  '2'.<BR>
+  <LI>Address 0x000a~0x000b is 0x1A01, it means this is a XResolution(0x011A) 
+  Tag, it contains a horizontal resolution of image.<BR>
+  <LI>Address 0x000c~0x000d is 0x0500, format of this value is unsigned 
+  rational(0x0005).<BR>
+  <LI>Address 0x000e~0x0011 is 0x01000000, number of components is '1'. Unsigned 
+  rational's data size is 8bytes/components, so total data length is 
+  1x8=8bytes.<BR>
+  <LI>Total data length is larger than 4bytes, so next 4bytes contains an offset 
+  to data.<BR>
+  <LI>Address 0x0012~0x0015 is 0x26000000, XResolution data is stored to address 
+  0x0026<BR>
+  <LI>Address 0x0026~0x0029 is 0x48000000, numerator is 72, address 
+  0x002a~0x002d is 0x0100000000, denominator is '1'. So the value of XResoultion 
+  is 72/1.<BR>
+  <LI>Address0x0016~0x0017 is 0x6987, next Tag is ExifOffset(0x8769). Its value 
+  is an offset to <B>Exif SubIFD</B><BR>
+  <LI>Data format is 0x0004, unsigned long integer.<BR>
+  <LI>This Tag has one component. Unsigned long integer's data size is 
+  4bytes/components, so total data size is 4bytes. 
+  <LI>Total data size is equal to 4bytes, next 4bytes contains the value of Exif 
+  SubIFD offset.<BR>
+  <LI>Address 0x001e~0x0021 is 0x11020000, Exif SubIFD starts from address 
+  '0x0211'.<BR>
+  <LI>This is the last directory entry, next 4bytes shows an offset to next 
+  IFD.<BR>
+  <LI>Address 0x0022~0x0025 is 0x40000000, next IFD starts from address '0x0040' 
+  </LI></UL><BR>
+<H3><A name=ExifThumbs>Thumbnail image</A></H3>Exif format contains thumbnail of 
+image (except Ricoh RDC-300Z). Usually it is located next to the IFD1. There are 
+3 formats for thumbnails; JPEG format(JPEG uses YCbCr), RGB TIFF format, YCbCr 
+TIFF format.<BR><BR>
+<H4><A name=JPEGThumbs>JPEG format thumbnail</A></H4>If the value of 
+<B>Compression(0x0103)</B> Tag in IFD1 is '6', thumbnail image format is JPEG. 
+Most of Exif image uses JPEG format for thumbnail. In that case, you can get 
+offset of thumbnail by <B>JpegIFOffset(0x0201)</B> Tag in IFD1, size of 
+thumbnail by <B>JpegIFByteCount(0x0202)</B> Tag. Data format is ordinary JPEG 
+format, starts from 0xFFD8 and ends by 0xFFD9. It seems that JPEG format and 
+160x120pixels of size are recommended thumbnail format for Exif2.1 or 
+later.<BR><BR>
+<H4><A name=TIFFThumbs>TIFF format thumbnail</A></H4>If the value of 
+<B>Compression(0x0103)</B> Tag in IFD1 is '1', thumbnail image format is no 
+compression(called TIFF image). Start point of thumbnail data is 
+<B>StripOffset(0x0111)</B> Tag, size of thumbnail is the sum of 
+<B>StripByteCounts(0x0117)</B> Tag.<BR><BR>If thumbnail uses no compression and 
+<B>PhotometricInterpretation(0x0106)</B>Tag in IFD1 has a value '2', thumbnail 
+uses RGB format. In that case, you can see thumbnail image by simply copy data 
+to computer's RGB format(such as BMP format, or copy to VRAM directory). Kodak 
+DC-210/220/260 use this format.<BR>If that tag has a value '6', thumbnail uses 
+YCbCr format. If you want to see thumbnail, you must convert it to RGB. Ricoh 
+RDC4200/4300, Fuji DS-7/300 and DX-5/7/9 use this format(newer RDC5000/MX-X00 
+series use JPEG). Next section is brief description to conversion of Fuji DS's 
+thumbnail. For more details, refer to <A 
+href="http://partners.adobe.com/asn/developer/PDFS/TN/TIFF6.pdf">TIFF6.0 
+specification</A>.<BR><BR>At DX-5/7/9, YCbCrSubsampling(0x0212) has values of 
+'2,1', PlanarConfiguration(0x011c) has a value '1'. So the data align of this 
+image is below.<BR><BR>Y(0,0),Y(1,0),Cb(0,0),Cr(0,0), 
+Y(2,0),Y(3,0),Cb(2,0),Cr(3.0), Y(4,0),Y(5,0),Cb(4,0),Cr(4,0). . . .<BR><BR>The 
+numerics in parenthesis are pixel coordinates. DX series' 
+YCbCrCoefficients(0x0211) has values '0.299/0.587/0.114', 
+ReferenceBlackWhite(0x0214) has values '0,255,128,255,128,255'. Therefore to 
+convert from Y/Cb/Cr to RGB 
+is;<BR><BR>B(0,0)=(Cb-128)*(2-0.114*2)+Y(0,0)<BR>R(0,0)=(Cr-128)*(2-0.299*2)+Y(0,0)<BR>G(0,0)=(Y(0,0)-0.114*B(0,0)-0.299*R(0,0))/0.587<BR><BR>Horizontal 
+subsampling is a value '2', so you can calculate B(1,0)/R(1,0)/G(1,0) by using 
+the Y(1,0) and Cr(0,0)/Cb(0,0). Repeat this conversion by value of 
+ImageWidth(0x0100) and ImageLength(0x0101).<BR><BR>
+<H2><A name=ExifTags>Tag number used by Exif/TIFF</A></H2>Tag numbers used by 
+Exif/TIFF are shown as below. If the Tag has upper limit of components number, 
+CompoNo column has numeric value. If it has no value, there is no 
+limitation.<BR><A name=IFD0Tags><BR></A>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD colSpan=5>
+      <CENTER><FONT size=+1><B>Tags used by IFD0 (main 
+    image)</B></FONT></CENTER></TD></TR>
+  <TR>
+    <TD>Tag No.</TD>
+    <TD>Tag Name</TD>
+    <TD>Format</TD>
+    <TD>CompoNo</TD>
+    <TD>Desc.</TD></TR>
+  <TR>
+    <TD>0x010e</TD>
+    <TD>ImageDescription </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD>Describes image</TD></TR>
+  <TR>
+    <TD>0x010f</TD>
+    <TD>Make </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD>Shows manufacturer of digicam</TD></TR>
+  <TR>
+    <TD>0x0110</TD>
+    <TD>Model </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD>Shows model number of digicam</TD></TR>
+  <TR>
+    <TD>0x0112</TD>
+    <TD>Orientation </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>The orientation of the camera relative to the scene, when the image 
+      was captured. The start point of stored data is, '1' means upper left, '3' 
+      lower right, '6' upper right, '8' lower left, '9' undefined.</TD></TR>
+  <TR>
+    <TD>0x011a</TD>
+    <TD>XResolution </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD rowSpan=2>Display/Print resolution of image. Large number of digicam 
+      uses 1/72inch, but it has no mean because personal computer doesn't use 
+      this value to display/print out.</TD></TR>
+  <TR>
+    <TD>0x011b</TD>
+    <TD>YResolution </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD></TR>
+  <TR>
+    <TD>0x0128</TD>
+    <TD>ResolutionUnit </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Unit of XResolution(0x011a)/YResolution(0x011b). <FONT 
+      color=#c02020>'1' means no-unit,</FONT> '2' means inch, '3' means 
+      centimeter.</TD></TR>
+  <TR>
+    <TD>0x0131</TD>
+    <TD>Software </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD>Shows firmware(internal software of digicam) version number.</TD></TR>
+  <TR>
+    <TD>0x0132</TD>
+    <TD>DateTime </TD>
+    <TD>ascii string</TD>
+    <TD>20 </TD>
+    <TD>Date/Time of image was last modified. Data format is "YYYY:MM:DD 
+      HH:MM:SS"+0x00, total 20bytes. In usual, it has the same value of 
+      DateTimeOriginal(0x9003)</TD></TR>
+  <TR>
+    <TD>0x013e</TD>
+    <TD>WhitePoint </TD>
+    <TD>unsigned rational</TD>
+    <TD>2 </TD>
+    <TD>Defines chromaticity of white point of the image. If the image uses 
+      CIE Standard Illumination D65(known as international standard of 
+      'daylight'), the values are '3127/10000,3290/10000'.</TD></TR>
+  <TR>
+    <TD>0x013f</TD>
+    <TD>PrimaryChromaticities </TD>
+    <TD>unsigned rational</TD>
+    <TD>6 </TD>
+    <TD>Defines chromaticity of the primaries of the image. If the image uses 
+      CCIR Recommendation 709 primearies, values are 
+      '640/1000,330/1000,300/1000,600/1000,150/1000,0/1000'.</TD></TR>
+  <TR>
+    <TD>0x0211</TD>
+    <TD>YCbCrCoefficients </TD>
+    <TD>unsigned rational</TD>
+    <TD>3 </TD>
+    <TD>When image format is YCbCr, this value shows a constant to translate 
+      it to RGB format. In usual, values are '0.299/0.587/0.114'.</TD></TR>
+  <TR>
+    <TD>0x0213</TD>
+    <TD>YCbCrPositioning </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>When image format is YCbCr and uses 'Subsampling'(cropping of chroma 
+      data, all the digicam do that), defines the chroma sample point of 
+      subsampling pixel array. '1' means the center of pixel array, '2' means 
+      the datum point.</TD></TR>
+  <TR>
+    <TD>0x0214</TD>
+    <TD>ReferenceBlackWhite </TD>
+    <TD>unsigned rational</TD>
+    <TD>6 </TD>
+    <TD>Shows reference value of black point/white point. In case of YCbCr 
+      format, first 2 show black/white of Y, next 2 are Cb, last 2 are Cr. In 
+      case of RGB format, first 2 show black/white of R, next 2 are G, last 2 
+      are B.</TD></TR>
+  <TR>
+    <TD>0x8298</TD>
+    <TD>Copyright </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD>Shows copyright information</TD></TR>
+  <TR>
+    <TD>0x8769</TD>
+    <TD>ExifOffset </TD>
+    <TD>unsigned long</TD>
+    <TD>1 </TD>
+    <TD>Offset to Exif Sub IFD</TD></TR></TBODY></TABLE><BR><A 
+name=ExifIFDTags><BR></A>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD colSpan=5>
+      <CENTER><FONT size=+1><B>Tags used by Exif 
+SubIFD</B></FONT></CENTER></TD></TR>
+  <TR>
+    <TD>Tag No.</TD>
+    <TD>Tag Name</TD>
+    <TD>Format</TD>
+    <TD>CompoNo</TD>
+    <TD>Desc.</TD></TR>
+  <TR>
+    <TD>0x829a</TD>
+    <TD>ExposureTime </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD>Exposure time (reciprocal of shutter speed). Unit is second.</TD></TR>
+  <TR>
+    <TD>0x829d</TD>
+    <TD>FNumber </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD>The actual F-number(F-stop) of lens when the image was taken.</TD></TR>
+  <TR>
+    <TD>0x8822</TD>
+    <TD>ExposureProgram </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Exposure program that the camera used when image was taken. '1' means 
+      manual control, '2' program normal, '3' aperture priority, '4' shutter 
+      priority, '5' program creative (slow program), '6' program 
+      action(high-speed program), '7' portrait mode, '8' landscape mode.</TD></TR>
+  <TR>
+    <TD>0x8827</TD>
+    <TD>ISOSpeedRatings </TD>
+    <TD>unsigned short</TD>
+    <TD>2 </TD>
+    <TD>CCD sensitivity equivalent to Ag-Hr film speedrate.</TD></TR>
+  <TR>
+    <TD>0x9000</TD>
+    <TD>ExifVersion </TD>
+    <TD>undefined</TD>
+    <TD>4 </TD>
+    <TD>Exif version number. Stored as 4bytes of ASCII character (like 
+    "0210")</TD></TR>
+  <TR>
+    <TD>0x9003</TD>
+    <TD>DateTimeOriginal </TD>
+    <TD>ascii string</TD>
+    <TD>20 </TD>
+    <TD>Date/Time of original image taken. This value should not be modified 
+      by user program.</TD></TR>
+  <TR>
+    <TD>0x9004</TD>
+    <TD>DateTimeDigitized </TD>
+    <TD>ascii string</TD>
+    <TD>20 </TD>
+    <TD>Date/Time of image digitized. Usually, it contains the same value of 
+      DateTimeOriginal(0x9003).</TD></TR>
+  <TR>
+    <TD>0x9101</TD>
+    <TD>ComponentConfiguration </TD>
+    <TD>undefined</TD>
+    <TD><BR></TD>
+    <TD>Unknown. It seems value 0x00,0x01,0x02,0x03 always.</TD></TR>
+  <TR>
+    <TD>0x9102</TD>
+    <TD>CompressedBitsPerPixel </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD>The average compression ratio of JPEG.</TD></TR>
+  <TR>
+    <TD>0x9201</TD>
+    <TD>ShutterSpeedValue </TD>
+    <TD>signed rational</TD>
+    <TD>1 </TD>
+    <TD>Shutter speed. To convert this value to ordinary 'Shutter Speed'; 
+      calculate this value's power of 2, then reciprocal. For example, if value 
+      is '4', shutter speed is 1/(2^4)=1/16 second.</TD></TR>
+  <TR>
+    <TD>0x9202</TD>
+    <TD>ApertureValue </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD>The actual aperture value of lens when the image was taken. To convert 
+      this value to ordinary F-number(F-stop), calculate this value's power of 
+      root 2 (=1.4142). For example, if value is '5', F-number is 1.4142^5 = 
+      F5.6.</TD></TR>
+  <TR>
+    <TD>0x9203</TD>
+    <TD>BrightnessValue </TD>
+    <TD>signed rational</TD>
+    <TD>1 </TD>
+    <TD>Brightness of taken subject, unit is EV.</TD></TR>
+  <TR>
+    <TD>0x9204</TD>
+    <TD>ExposureBiasValue </TD>
+    <TD>signed rational</TD>
+    <TD>1 </TD>
+    <TD>Exposure bias value of taking picture. Unit is EV.</TD></TR>
+  <TR>
+    <TD>0x9205</TD>
+    <TD>MaxApertureValue </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD>Maximum aperture value of lens. You can convert to F-number by 
+      calculating power of root 2 (same process of ApertureValue(0x9202).</TD></TR>
+  <TR>
+    <TD>0x9206</TD>
+    <TD>SubjectDistance </TD>
+    <TD>signed rational</TD>
+    <TD>1 </TD>
+    <TD>Distance to focus point, unit is meter.</TD></TR>
+  <TR>
+    <TD>0x9207</TD>
+    <TD>MeteringMode </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Exposure metering method. '1' means average, '2' center weighted 
+      average, '3' spot, '4' multi-spot, '5' multi-segment.</TD></TR>
+  <TR>
+    <TD>0x9208</TD>
+    <TD>LightSource </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Light source, actually this means white balance setting. '0' means 
+      auto, '1' daylight, '2' fluorescent, '3' tungsten, '10' flash.</TD></TR>
+  <TR>
+    <TD>0x9209</TD>
+    <TD>Flash </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>'1' means flash was used, '0' means not used.</TD></TR>
+  <TR>
+    <TD>0x920a</TD>
+    <TD>FocalLength </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD>Focal length of lens used to take image. Unit is millimeter.</TD></TR>
+  <TR>
+    <TD>0x927c</TD>
+    <TD>MakerNote </TD>
+    <TD>undefined</TD>
+    <TD><BR></TD>
+    <TD>Maker dependent internal data. Some of maker such as 
+      Olympus/Nikon/Sanyo etc. uses IFD format for this area.</TD></TR>
+  <TR>
+    <TD>0x9286</TD>
+    <TD>UserComment </TD>
+    <TD>undefined</TD>
+    <TD><BR></TD>
+    <TD>Stores user comment.</TD></TR>
+  <TR>
+    <TD>0xa000</TD>
+    <TD>FlashPixVersion </TD>
+    <TD>undefined</TD>
+    <TD>4 </TD>
+    <TD>Stores FlashPix version. Unknown but 4bytes of ASCII characters 
+      "0100"exists.</TD></TR>
+  <TR>
+    <TD>0xa001</TD>
+    <TD>ColorSpace </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Unknown, value is '1'.</TD></TR>
+  <TR>
+    <TD>0xa002</TD>
+    <TD>ExifImageWidth </TD>
+    <TD>unsigned <FONT color=#c02020>short/</FONT>long</TD>
+    <TD>1 </TD>
+    <TD rowSpan=2>Size of main image.</TD></TR>
+  <TR>
+    <TD>0xa003</TD>
+    <TD>ExifImageHeight </TD>
+    <TD>unsigned <FONT color=#c02020>short/</FONT>long</TD>
+    <TD>1 </TD></TR>
+  <TR>
+    <TD>0xa004</TD>
+    <TD>RelatedSoundFile </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD>If this digicam can record audio data with image, shows name of audio 
+      data.</TD></TR>
+  <TR>
+    <TD>0xa005</TD>
+    <TD>ExifInteroperabilityOffset </TD>
+    <TD>unsigned long</TD>
+    <TD>1 </TD>
+    <TD>Extension of "ExifR98", detail is unknown. This value is offset to IFD 
+      format data. Currently there are 2 directory entries, first one is 
+      Tag0x0001, value is "R98", next is Tag0x0002, value is "0100".</TD></TR>
+  <TR>
+    <TD>0xa20e</TD>
+    <TD>FocalPlaneXResolution </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD rowSpan=2>CCD's pixel density.</TD></TR>
+  <TR>
+    <TD>0xa20f</TD>
+    <TD>FocalPlaneYResolution </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD></TR>
+  <TR>
+    <TD>0xa210</TD>
+    <TD>FocalPlaneResolutionUnit </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Unit of FocalPlaneXResoluton/FocalPlaneYResolution. <FONT 
+      color=#c02020>'1' means no-unit, '2' inch, '3' centimeter.</FONT></TD></TR>
+  <TR>
+    <TD>0xa217</TD>
+    <TD>SensingMethod </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Shows type of image sensor unit. '2' means 1 chip color area sensor, 
+      most of all digicam use this type.</TD></TR>
+  <TR>
+    <TD>0xa300</TD>
+    <TD>FileSource </TD>
+    <TD>undefined</TD>
+    <TD>1 </TD>
+    <TD>Unknown but value is '3'.</TD></TR>
+  <TR>
+    <TD>0xa301</TD>
+    <TD>SceneType </TD>
+    <TD>undefined</TD>
+    <TD>1 </TD>
+    <TD>Unknown but value is '1'.</TD></TR></TBODY></TABLE><BR><BR><A 
+name=IFD1Tags><BR></A>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD colSpan=5>
+      <CENTER><FONT size=+1><B>Tags used by IFD1 (thumbnail 
+      image)</B></FONT></CENTER></TD></TR>
+  <TR>
+    <TD>Tag No.</TD>
+    <TD>Tag Name</TD>
+    <TD>Format</TD>
+    <TD>CompoNo</TD>
+    <TD>Desc.</TD></TR>
+  <TR>
+    <TD>0x0100</TD>
+    <TD>ImageWidth </TD>
+    <TD>unsigned <FONT color=#c02020>short/</FONT>long</TD>
+    <TD>1 </TD>
+    <TD rowSpan=2>Shows size of thumbnail image.</TD></TR>
+  <TR>
+    <TD>0x0101</TD>
+    <TD>ImageLength </TD>
+    <TD>unsigned <FONT color=#c02020>short/</FONT>long</TD>
+    <TD>1 </TD>
+  <TR>
+    <TD>0x0102</TD>
+    <TD>BitsPerSample </TD>
+    <TD>unsigned short</TD>
+    <TD>3 </TD>
+    <TD>When image format is no compression, this value shows the number of 
+      bits per component for each pixel. Usually this value is '8,8,8'</TD></TR>
+  <TR>
+    <TD>0x0103</TD>
+    <TD>Compression </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Shows compression method. '1' means no compression, '6' means JPEG 
+      compression.</TD></TR>
+  <TR>
+    <TD>0x0106</TD>
+    <TD>PhotometricInterpretation </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Shows the color space of the image data components. '1' means 
+      monochrome, '2' means RGB, '6' means YCbCr.</TD></TR>
+  <TR>
+    <TD>0x0111</TD>
+    <TD>StripOffsets </TD>
+    <TD>unsigned <FONT color=#c02020>short/</FONT>long</TD>
+    <TD><BR></TD>
+    <TD>When image format is no compression, this value shows offset to image 
+      data. In some case image data is striped and this value is plural.</TD></TR>
+  <TR>
+    <TD>0x0115</TD>
+    <TD>SamplesPerPixel </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>When image format is no compression, this value shows the number of 
+      components stored for each pixel. At color image, this value is '3'.</TD></TR>
+  <TR>
+    <TD>0x0116</TD>
+    <TD>RowsPerStrip </TD>
+    <TD>unsigned short<FONT color=#c02020>/long</FONT></TD>
+    <TD>1 </TD>
+    <TD>When image format is no compression and image has stored as strip, 
+      this value shows how many rows stored to each strip. If image has not 
+      striped, this value is the same as ImageLength(0x0101).</TD></TR>
+  <TR>
+    <TD>0x0117</TD>
+    <TD>StripByteConunts </TD>
+    <TD>unsigned <FONT color=#c02020>short/</FONT>long</TD>
+    <TD><BR></TD>
+    <TD>When image format is no compression and stored as strip, this value 
+      shows how many bytes used for each strip and this value is plural. If 
+      image has not stripped, this value is single and means whole data size of 
+      image.</TD></TR>
+  <TR>
+    <TD>0x011a</TD>
+    <TD>XResolution </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD rowSpan=2>Display/Print resolution of image. Large number of digicam 
+      uses 1/72inch, but it has no mean because personal computer doesn't use 
+      this value to display/print out.</TD></TR>
+  <TR>
+    <TD>0x011b</TD>
+    <TD>YResolution </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD></TR>
+  <TR>
+    <TD>0x011c</TD>
+    <TD>PlanarConfiguration </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>When image format is no compression YCbCr, this value shows byte 
+      aligns of YCbCr data. If value is '1', Y/Cb/Cr value is chunky format, 
+      contiguous for each subsampling pixel. If value is '2', Y/Cb/Cr value is 
+      separated and stored to Y plane/Cb plane/Cr plane format.</TD></TR>
+  <TR>
+    <TD>0x0128</TD>
+    <TD>ResolutionUnit </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>Unit of XResolution(0x011a)/YResolution(0x011b). '1' means inch, '2' 
+      means centimeter.</TD></TR>
+  <TR>
+    <TD>0x0201</TD>
+    <TD>JpegIFOffset </TD>
+    <TD>unsigned long</TD>
+    <TD>1 </TD>
+    <TD>When image format is JPEG, this value show offset to JPEG data 
+    stored.</TD></TR>
+  <TR>
+    <TD>0x0202</TD>
+    <TD>JpegIFByteCount </TD>
+    <TD>unsigned long</TD>
+    <TD>1 </TD>
+    <TD>When image format is JPEG, this value shows data size of JPEG 
+  image.</TD></TR>
+  <TR>
+    <TD>0x0211</TD>
+    <TD>YCbCrCoefficients </TD>
+    <TD>unsigned rational</TD>
+    <TD>3 </TD>
+    <TD>When image format is YCbCr, this value shows constants to translate it 
+      to RGB format. In usual, '0.299/0.587/0.114' are used.</TD></TR>
+  <TR>
+    <TD>0x0212</TD>
+    <TD>YCbCrSubSampling </TD>
+    <TD>unsigned short</TD>
+    <TD>2 </TD>
+    <TD>When image format is YCbCr and uses subsampling(cropping of chroma 
+      data, all the digicam do that), this value shows how many chroma data 
+      subsampled. First value shows horizontal, next value shows vertical 
+      subsample rate.</TD></TR>
+  <TR>
+    <TD>0x0213</TD>
+    <TD>YCbCrPositioning </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD>When image format is YCbCr and uses 'Subsampling'(cropping of chroma 
+      data, all the digicam do that), this value defines the chroma sample point 
+      of subsampled pixel array. '1' means the center of pixel array, '2' means 
+      the datum point(0,0).</TD></TR>
+  <TR>
+    <TD>0x0214</TD>
+    <TD>ReferenceBlackWhite </TD>
+    <TD>unsigned rational</TD>
+    <TD>6 </TD>
+    <TD>Shows reference value of black point/white point. In case of YCbCr 
+      format, first 2 show black/white of Y, next 2 are Cb, last 2 are Cr. In 
+      case of RGB format, first 2 show black/white of R, next 2 are G, last 2 
+      are B.</TD></TR></TBODY></TABLE><BR><A name=MiscTags><BR></A>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD colSpan=5>
+      <CENTER><FONT size=+1><B>Misc Tags</B></FONT></CENTER></TD></TR>
+  <TR>
+    <TD>Tag No.</TD>
+    <TD>Tag Name</TD>
+    <TD>Format</TD>
+    <TD>CompoNo</TD>
+    <TD>Desc.</TD></TR>
+  <TR>
+    <TD>0x00fe</TD>
+    <TD>NewSubfileType </TD>
+    <TD>unsigned long</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x00ff</TD>
+    <TD>SubfileType </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x012d</TD>
+    <TD>TransferFunction </TD>
+    <TD>unsigned short</TD>
+    <TD>3 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x013b</TD>
+    <TD>Artist </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x013d</TD>
+    <TD>Predictor </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x0142</TD>
+    <TD>TileWidth </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x0143</TD>
+    <TD>TileLength </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x0144</TD>
+    <TD>TileOffsets </TD>
+    <TD>unsigned long</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x0145</TD>
+    <TD>TileByteCounts </TD>
+    <TD>unsigned short</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x014a</TD>
+    <TD>SubIFDs </TD>
+    <TD>unsigned long</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x015b</TD>
+    <TD>JPEGTables </TD>
+    <TD>undefined</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x828d</TD>
+    <TD>CFARepeatPatternDim </TD>
+    <TD>unsigned short</TD>
+    <TD>2 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x828e</TD>
+    <TD>CFAPattern </TD>
+    <TD>unsigned byte</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x828f</TD>
+    <TD>BatteryLevel </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x83bb</TD>
+    <TD>IPTC/NAA </TD>
+    <TD>unsigned long</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x8773</TD>
+    <TD>InterColorProfile </TD>
+    <TD>undefined</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x8824</TD>
+    <TD>SpectralSensitivity </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x8825</TD>
+    <TD>GPSInfo </TD>
+    <TD>unsigned long</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x8828</TD>
+    <TD>OECF </TD>
+    <TD>undefined</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x8829</TD>
+    <TD>Interlace </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x882a</TD>
+    <TD>TimeZoneOffset </TD>
+    <TD>signed short</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x882b</TD>
+    <TD>SelfTimerMode </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x920b</TD>
+    <TD>FlashEnergy </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x920c</TD>
+    <TD>SpatialFrequencyResponse </TD>
+    <TD>undefined</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x920d</TD>
+    <TD>Noise </TD>
+    <TD>undefined</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x9211</TD>
+    <TD>ImageNumber </TD>
+    <TD>unsigned long</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x9212</TD>
+    <TD>SecurityClassification </TD>
+    <TD>ascii string</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x9213</TD>
+    <TD>ImageHistory </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x9214</TD>
+    <TD>SubjectLocation </TD>
+    <TD>unsigned short</TD>
+    <TD>4 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x9215</TD>
+    <TD>ExposureIndex </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x9216</TD>
+    <TD>TIFF/EPStandardID </TD>
+    <TD>unsigned byte</TD>
+    <TD>4 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x9290</TD>
+    <TD>SubSecTime </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x9291</TD>
+    <TD>SubSecTimeOriginal </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0x9292</TD>
+    <TD>SubSecTimeDigitized </TD>
+    <TD>ascii string</TD>
+    <TD><BR></TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0xa20b</TD>
+    <TD>FlashEnergy </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0xa20c</TD>
+    <TD>SpatialFrequencyResponse </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0xa214</TD>
+    <TD>SubjectLocation </TD>
+    <TD>unsigned short</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0xa215</TD>
+    <TD>ExposureIndex </TD>
+    <TD>unsigned rational</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR>
+  <TR>
+    <TD>0xa302</TD>
+    <TD>CFAPattern </TD>
+    <TD>undefined</TD>
+    <TD>1 </TD>
+    <TD><BR></TD></TR></TBODY></TABLE><FONT color=#c02020>
+<H2><A name=APP1>Appendix 1: MakerNote of Olympus Digicams</A></H2>The data 
+below is analyzed at Olympus D450Z(C-920Z) by Peter Esherick.<BR><BR>MakerNote 
+of Olympus Digicam starts from ASCII string "OLYMP". Data format is the same as 
+IFD, it starts from offset 0x07. Example of actual data structure is shown 
+below. <PRE>:0000: 4F 4C 59 4D 50 00 01 00 0B-00 00 02 04 00 03 00  OLYMP...........
+:0010: 00 00 0E 04 00 00 01 02 03-00 01 00 00 00 03 00  ................
+</PRE></FONT><BR>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TD>Tag No.</TD>
+    <TD>Tag Name</TD>
+    <TD>Format</TD>
+    <TD>CompoNo</TD>
+    <TD>Value</TD></TR>
+  <TR>
+    <TD>0x0200</TD>
+    <TD>SpecialMode</TD>
+    <TD>Unsigned Long</TD>
+    <TD>3</TD>
+    <TD>Shows picture taking mode. First value means 0=normal, 1=unknown, 
+      2=fast, 3=panorama. Second value means sequence number, third value means 
+      panorama direction, 1=left to right, 2=right to left, 3=bottom to top, 
+      4=top to bottom.</TD></TR>
+  <TR>
+    <TD>0x0201</TD>
+    <TD>JpegQual</TD>
+    <TD>Unsigned Short</TD>
+    <TD>1</TD>
+    <TD>Shows JPEG quality. 1=SQ,2=HQ,3=SHQ.</TD></TR>
+  <TR>
+    <TD>0x0202</TD>
+    <TD>Macro</TD>
+    <TD>Unsigned Short</TD>
+    <TD>1</TD>
+    <TD>Shows Macro mode or not. 0=normal, 1=macro.</TD></TR>
+  <TR>
+    <TD>0x0203</TD>
+    <TD>Unknown</TD>
+    <TD>Unsigned Short</TD>
+    <TD>1</TD>
+    <TD>Unknown</TD></TR>
+  <TR>
+    <TD>0x0204</TD>
+    <TD>DigiZoom</TD>
+    <TD>Unsigned Rational</TD>
+    <TD>1</TD>
+    <TD>Shows Digital Zoom ratio. 0=normal, 2=digital 2x zoom.</TD></TR>
+  <TR>
+    <TD>0x0205</TD>
+    <TD>Unknown</TD>
+    <TD>Unsigned Rational</TD>
+    <TD>1</TD>
+    <TD>Unknown</TD></TR>
+  <TR>
+    <TD>0x0206</TD>
+    <TD>Unknown</TD>
+    <TD>Signed Short</TD>
+    <TD>6</TD>
+    <TD>Unknown</TD></TR>
+  <TR>
+    <TD>0x0207</TD>
+    <TD>SoftwareRelease</TD>
+    <TD>Ascii string</TD>
+    <TD>5</TD>
+    <TD>Shows Firmware version.</TD></TR>
+  <TR>
+    <TD>0x0208</TD>
+    <TD>PictInfo</TD>
+    <TD>Ascii string</TD>
+    <TD>52</TD>
+    <TD>Contains ASCII format data such as [PctureInfo]. This is the same data 
+      format of older Olympus digicams which not used Exif data format 
+      (C1400/C820/D620/D340 etc).</TD></TR>
+  <TR>
+    <TD>0x0209</TD>
+    <TD>CameraID</TD>
+    <TD>Undefined</TD>
+    <TD>32</TD>
+    <TD>Contains CameraID data, which is user changeable by some utilities</TD>
+  <TR>
+    <TD>0x0f00</TD>
+    <TD>DataDump</TD>
+    <TD>Unsigned Long</TD>
+    <TD>30</TD>
+    <TD>Unknown</TD></TR></TBODY></TABLE><BR>
+<HR>
+<BR>
+<H2><A name=HIST>History</A></H2>
+<H3>rev. 1.1</H3>
+<UL>
+  <LI>Added byte align explanation to TAG Mark of TIFF header 
+  <LI>Corrected data format of some TAGs to "unsigned short/long" 
+  <LI>Corrected value of FocalPlaneResolutionUnit 
+  <LI>Added Appendix 1: MakerNote of Olympus </LI></UL>
+<H3>rev. 1.0</H3>
+<UL>
+  <LI>First release </LI></UL>
+<H2><A name=THANKS>Acknowledgement</A></H2>I would like to thank 
+to;<BR><BR>Daniel Switkin: Byte align of TAG Mark, Format of 
+ImageWidth/ImageLength<BR>Peter Esherick: MakerNote of Olympus<BR>Matthias 
+Wandel: Value of FocalPlaneResolutionUnit<BR></BODY></HTML>
